@@ -1,0 +1,6 @@
+spring:
+  profiles:
+    active: dev
+
+app:
+  github-url: https://github.com/Va7icanA55asin

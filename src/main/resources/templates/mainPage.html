@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta th:if="${_csrf != null}" name="_csrf" th:content="${_csrf.token}"/>
+    <meta th:if="${_csrf != null}" name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <script type="text/javascript" th:src="@{/webjars/jquery/3.3.1-2/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+    <meta charset="UTF-8">
+    <title>Welcome!</title>
+</head>
+<body style="background-color: #bc0000">
+<header>
+    <button style="text-align: right" th:if="${!authenticated}"><a href="/oauth2/authorization/okta">Login</a></button>
+    <button style="text-align: right"><a href="/logout">Logout</a></button>
+</header>
+    <main id="main" style="text-align: center; align-content: center">
+        <div>
+            <h2>Welcome!</h2>
+            <h4 th:if="${authenticated}" th:text="${authenticated ? 'You are logged in!' : ''}">text</h4>
+            <h4>Today is: <span th:text="${time}"></span></h4>
+            <h4>Check out all of my projects at: <a th:href="${githubUrl}" th:text="${githubUrl}"></a></h4>
+        </div>
+        <div>
+            <h4><button id="apod">Click here for the NASA Astronomy Picture of the Day.</button></h4>
+            <div id="imageDiv"></div>
+        </div>
+    </main>
+</body>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+
+    $(document).ready(function () {});
+
+    $("#apod").click(function () {
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        $.ajax({
+            url: "/rest/apod",
+            type: 'GET',
+            beforeSend: function (request) {
+                if (header !== null && header !== '') {
+                    request.setRequestHeader(header, token);
+                }
+                request.setRequestHeader("Accept", "application/json; charset=utf-8");
+            },
+            success: function (data) {
+                $("#imageDiv").append("<img src='" + data.url + "' height='25%' width='25%'>")
+            }
+        });
+    })
+    /*]]>*/
+</script>
+</html>
