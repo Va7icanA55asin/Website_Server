@@ -11,7 +11,7 @@ import java.util.Map;
 @Component
 public class ExternalAPIAdapter {
 
-    @Value("${nasa.api-token}")
+    @Value("${nasa.api-token:badToken}")
     private String nasaApiToken;
 
     private WebClient nasaWebClient;
