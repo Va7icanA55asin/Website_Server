@@ -20,3 +20,7 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+
+### Protected Files ###
+Security.java
+application-dev.yml
